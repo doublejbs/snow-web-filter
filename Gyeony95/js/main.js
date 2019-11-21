@@ -6,8 +6,11 @@ streaming = false;
 window.onload = function(){
 	//필요한 변수들 정의
     const img = new Image();
-    const img2 = new Image();
+	const img2 = new Image();
+	const img3 = new Image();
 	img.src = 'assets/img/angry.png';
+	img2.src = 'assets/img/bin4.png';
+	img3.src = 'assets/img/gurl.png';
 	const video = document.getElementById('video');
 	const canvas = document.getElementById('canvas');
 	const remoteVideo = document.getElementById('remoteVideo');
@@ -17,10 +20,11 @@ window.onload = function(){
 	const photoFilter = document.querySelector("#photo-filter");
 	const firstButton = document.querySelector("#first-mask");
 	const secondButton = document.querySelector("#second-mask");
-	const thirdFilter = document.querySelector("#third-mask");
+	const thirdButton = document.querySelector("#third-mask");
 	console.log(photoFilter);
 	const context = canvas.getContext('2d');
 	const canvasStream = canvas.captureStream();
+	//이걸로 얼굴 따라가는 기능 구현
 	const tracker = new tracking.ObjectTracker('face');
 	//############################ 여기부터 webrtc코드 ################################
 	if (!location.hash) {
@@ -168,7 +172,6 @@ window.onload = function(){
 	   		streaming = true;
 			}
 			}, false);
-
 		//색깔필터 바꾸는 부분
 		photoFilter.addEventListener('change', function(e){
 			//어떤 필터가 선택 되었는지 그 값을 가져온다.
@@ -184,6 +187,66 @@ window.onload = function(){
 			video.style.filter = filter;
 			e.preventDefault();
 		});		
+
+		//Clear button evnet
+		clearButton.addEventListener('click', function(e){
+		filter = 'none';
+		video.style.filter = filter;
+		document.querySelector("#normal").checked = true;
+		});
+		//화난 이모티콘으로 마스크
+		firstButton.addEventListener('click', function(e){
+			filter = 'none';
+			video.style.filter = filter;
+			document.querySelector("#normal").checked = true;
+			tracker.setInitialScale(1);
+			tracker.setStepSize(1);
+			tracker.setEdgesDensity(0.1);
+			context.fillStyle = "#"+Math.floor(Math.random() * 0xFFFFFF).toString(16);
+			tracking.track('#video', tracker);
+			tracker.on('track', function(event) { 
+			  context.clearRect(0, 0, canvas.width, canvas.height);
+			  event.data.forEach(function(rect) {
+			  context.drawImage(img, rect.x,rect.y, rect.width,rect.height);
+			  });
+			});
+	
+		});
+		//원빈얼굴로 마스크
+		secondButton.addEventListener('click', function(e){
+			filter = 'none';
+			video.style.filter = filter;
+			document.querySelector("#normal").checked = true;
+			tracker.setInitialScale(1);
+			tracker.setStepSize(1);
+			tracker.setEdgesDensity(0.1);
+			context.fillStyle = "#"+Math.floor(Math.random() * 0xFFFFFF).toString(16);
+			tracking.track('#video', tracker);
+			tracker.on('track', function(event) { 
+			  context.clearRect(0, 0, canvas.width, canvas.height);
+			  event.data.forEach(function(rect) {
+			  context.drawImage(img2, rect.x,rect.y, rect.width,rect.height);
+			  });
+			});
+	
+		});
+		//여자 얼굴 마스크
+		thirdButton.addEventListener('click', function(e){
+			filter = 'none';
+			video.style.filter = filter;
+			document.querySelector("#normal").checked = true;
+			tracker.setInitialScale(1);
+			tracker.setStepSize(1);
+			tracker.setEdgesDensity(0.1);
+			context.fillStyle = "#"+Math.floor(Math.random() * 0xFFFFFF).toString(16);
+			tracking.track('#video', tracker);
+			tracker.on('track', function(event) { 
+			  context.clearRect(0, 0, canvas.width, canvas.height);
+			  event.data.forEach(function(rect) {
+			  context.drawImage(img3, rect.x,rect.y, rect.width,rect.height);
+			  });
+			});
+		});
 	  	// Listen to signaling data from Scaledrone
 	  	room.on('data', (message, client) => {
 		// Message was sent by us
@@ -192,7 +255,6 @@ window.onload = function(){
 		  return;
 		}
 		if (message.sdp) {
-		//p_status.innerHTML +=  "remote sdp received.!!! </br>";
 		  // This is called after receiving an offer or answer from another peer
 		  pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
 			// When receiving an offer lets answer it

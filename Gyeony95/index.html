@@ -6,8 +6,8 @@
   <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/tracking-min.js"></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/data/face-min.js"></script>
-  <style src="assets/css/style.css"></style>
   <link rel = "stylesheet" href="css/bootstrap.css">
+  <link rel = "stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="copy"  id="container"> 
@@ -15,11 +15,14 @@
         <p> <h1> ##<a id="url_a_id" target=_blank><span id="url_id"></span></a> ## </h1></p>
     </center>
   </div>
+  <div id="container">
+    <video id="video" width="320" height="240"   autoplay muted ></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <video id="remoteVideo" width="320" height="240" autoplay></video>
+  </div>
+  <br>
   <div class="demo-frame" id="container">
       <center>
-          <video id="video" width="320" height="240"   autoplay muted ></video>
-          <canvas id="canvas" width="320" height="240"></canvas>
-          <video id="remoteVideo" width="320" height="240" autoplay></video>
           <fieldset id="photo-filter">
               <legend>Color filter</legend>
               <input type="radio" name="filter" id="normal" value="none" checked="checked">
