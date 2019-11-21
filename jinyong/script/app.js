@@ -5,6 +5,7 @@ var localMediaStream = null;
 var errorCallback = function (e) {
     console.log('Reeeejected!', e);
 };
+
 function snapshot() {
     video.play();
     if (localMediaStream) {
