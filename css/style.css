@@ -50,3 +50,13 @@
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+#video, #canvas {
+  margin-left: 10%;
+  margin-top: 120px;
+  position: absolute;
+}
+#remoteVideo {
+  margin-left: 500px;
+  margin-top: 120px;
+  position: absolute;
+}

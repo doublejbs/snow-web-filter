@@ -6,23 +6,8 @@
   <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/tracking-min.js"></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/data/face-min.js"></script>
-  <!-- <script src="https://rawgit.com/dataarts/dat.gui/master/build/dat.gui.min.js"></script> !-->
-  <!-- <script src="https://rawgit.com/eduardolundgren/tracking.js/master/examples/assets/stats.min.js"></script> !-->
   <style src="assets/css/style.css"></style>
   <link rel = "stylesheet" href="css/bootstrap.css">
-  <style>
-   #video, #canvas {
-    margin-left: 10%;
-    margin-top: 120px;
-    position: absolute;
-  }
-  #remoteVideo {
-    margin-left: 500px;
-    margin-top: 120px;
-    position: absolute;
-  }
-  
-  </style>
 </head>
 <body>
   <div class="copy"  id="container"> 
@@ -30,8 +15,6 @@
         <p> <h1> ##<a id="url_a_id" target=_blank><span id="url_id"></span></a> ## </h1></p>
     </center>
   </div>
-  
-  
   <div class="demo-frame" id="container">
       <center>
           <video id="video" width="320" height="240"   autoplay muted ></video>
@@ -53,7 +36,6 @@
               <label for="blur">blur</label>
               <input type="radio" name="filter" id="contrast" value="contrast(200%)">
               <label for="contrast">Contrast</lable>
-              
          </fieldset>
          <br>
          <button id="first-mask" class="btn btn-dark">첫번째 마스크</button>
@@ -63,16 +45,12 @@
          <button id="photo-button" class="btn btn-dark">Take photo</button>
       <button id="clear-button" class="btn btn-dark">Clear</button>
       </center>
-     
   </div>
   <div id="container">
 	<h2 id="status"> </h2>
-  </div>
-  <!-- <video id="video1"  width="320" height="240" autoplay></video> !-->
-  
+  </div>  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type='text/javascript' src='js/main.js'></script>
-  
   <script type='text/javascript' src='js/bootstrap.js'></script>
 </body>
 </html>
