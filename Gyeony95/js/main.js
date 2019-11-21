@@ -168,8 +168,24 @@ window.onload = function(){
 	   		streaming = true;
 			}
 			}, false);
-	  // Listen to signaling data from Scaledrone
-	  room.on('data', (message, client) => {
+
+		//색깔필터 바꾸는 부분
+		photoFilter.addEventListener('change', function(e){
+			//어떤 필터가 선택 되었는지 그 값을 가져온다.
+			var obj = document.getElementsByName("filter");
+			var checked_index = -1;
+			for(var k = 0; k < obj.length; k++){
+				if(obj[k].checked){
+					checked_index = k;
+					filter = obj[k].value;
+				}
+			}
+			//이렇게 나온 필터의 값을 비디오 스타일에 적용
+			video.style.filter = filter;
+			e.preventDefault();
+		});		
+	  	// Listen to signaling data from Scaledrone
+	  	room.on('data', (message, client) => {
 		// Message was sent by us
 		console.log("message received:", message, client);
 		if (client.id === drone.clientId) {
@@ -185,7 +201,6 @@ window.onload = function(){
 			}
 		  }, onError);
 		} else if (message.candidate) {
-			//p_status.innerHTML +=  "remote sdp received.!!!</br>";
 		  // Add the new ICE candidate to our connections remote description
 		  pc.addIceCandidate(
 			new RTCIceCandidate(message.candidate), onSuccess, onError
