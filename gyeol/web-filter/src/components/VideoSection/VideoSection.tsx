@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
@@ -89,9 +89,10 @@ const VideoSection: React.FC<IProps> = ({
   useEffect(() => {
     const video = videoEl.current;
 
-    if (!video) return;
+    if (!video || !overlay) return;
 
     video.style.filter = filter;
+    overlay.style.filter = filter;
   }, [filter]);
 
   // sticker가 바뀔 때,

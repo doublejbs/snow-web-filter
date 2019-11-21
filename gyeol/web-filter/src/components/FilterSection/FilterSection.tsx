@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 
+import { ReactComponent as FilterSVG } from "../../assets/filter.svg";
+
 import CustomFilter from "./CustomFilter";
 import Button from "../../common/Button";
 import filterToString from "../../utils/filterToString";
@@ -28,7 +30,6 @@ const FilterSection: React.FC<IProps> = ({
   setSticker
 }): JSX.Element => {
   const [showCustom, setShowCustom] = useState<boolean>(false);
-
   const [slideFilter, setSlideFilter] = useState<IFilter>({
     // 이하 0 ~ 100
     grayscale: 0,
@@ -64,8 +65,9 @@ const FilterSection: React.FC<IProps> = ({
     [flag, filterToString, setSlideFilter, setFilter]
   );
 
-  const onClickFilterButton = useCallback(() => {
-    setFilter("blur(2px)");
+  const onClickFilterButton = useCallback(e => {
+    const { svgfilter } = e.target.dataset;
+    setFilter(`url(#${svgfilter})`);
   }, []);
 
   const toggleCustomFilter = useCallback(() => {
@@ -79,7 +81,12 @@ const FilterSection: React.FC<IProps> = ({
 
   return (
     <Container>
-      <Button onClick={onClickFilterButton}>blur</Button>
+      <Button data-svgfilter="feMorphology" onClick={onClickFilterButton}>
+        feMorphology
+      </Button>
+      <Button data-svgfilter="feColorMatrix" onClick={onClickFilterButton}>
+        feColorMatrix
+      </Button>
       <Button data-sticker={Sticker.RABBIT} onClick={onClickSticker}>
         토끼귀
       </Button>
@@ -93,6 +100,7 @@ const FilterSection: React.FC<IProps> = ({
           sliderChangeHandler={sliderChangeHandler}
         />
       ) : null}
+      <SVG />
     </Container>
   );
 };
@@ -105,4 +113,8 @@ const Container = styled.div`
   padding: 1rem;
   display: flex;
   flex-wrap: wrap;
+`;
+
+const SVG = styled(FilterSVG)`
+  display: none;
 `;
