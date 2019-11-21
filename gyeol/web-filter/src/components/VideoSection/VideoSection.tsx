@@ -2,31 +2,22 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
-import getStickerPosition, { Sticker } from "../utils/getStickerPosition";
+import getStickerPosition, { Sticker } from "../../utils/getStickerPosition";
 
 interface IProps {
-  size: { width: number; height: number };
-  setSize: React.Dispatch<
-    React.SetStateAction<{
-      width: number;
-      height: number;
-    }>
-  >;
   filter: string;
   sticker: Sticker | null;
 }
 
-const VideoSection: React.FC<IProps> = ({
-  size,
-  setSize,
-  filter,
-  sticker
-}): JSX.Element => {
+const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
-  const [overlay, setOverlay] = useState<HTMLCanvasElement | null>(null);
   const [overlayCC, setOverlayCC] = useState<CanvasRenderingContext2D | null>(
     null
   );
+  const [size, setSize] = useState<{ width: number; height: number }>({
+    width: 400,
+    height: 300
+  });
 
   const videoEl = useRef<HTMLVideoElement>(null);
   const overlayEl = useRef<HTMLCanvasElement>(null);
@@ -57,7 +48,6 @@ const VideoSection: React.FC<IProps> = ({
     }
 
     setVideo(video);
-    setOverlay(overlay);
 
     navigator.mediaDevices
       .getUserMedia({
@@ -104,13 +94,13 @@ const VideoSection: React.FC<IProps> = ({
   }, [sticker]);
 
   const startFaceTracker = (sticker: Sticker) => {
-    if (!video || !overlay || !ctrack) return;
+    if (!video || !ctrack) return;
     ctrack.start(video);
     drawLoop(sticker);
   };
 
   const drawLoop = (sticker: Sticker) => {
-    if (!overlay || !ctrack || !overlayCC) return;
+    if (!ctrack || !overlayCC) return;
     requestAnimationFrame(() => drawLoop(sticker));
     overlayCC.clearRect(0, 0, size.width, size.height);
 

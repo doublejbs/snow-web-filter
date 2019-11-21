@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 
 import CustomFilter from "./CustomFilter";
-import Button from "./Button";
+import Button from "../../common/Button";
 import filterToString from "../../utils/filterToString";
 import { Sticker } from "../../utils/getStickerPosition";
 
@@ -74,11 +74,20 @@ const FilterSection: React.FC<IProps> = ({
     setShowCustom(!showCustom);
   }, [showCustom]);
 
+  const onClickSticker = useCallback(e => {
+    const { sticker } = e.target.dataset;
+    setSticker(sticker);
+  }, []);
+
   return (
     <Container>
       <Button onClick={onClickFilterButton}>blur</Button>
-      <Button onClick={() => setSticker(Sticker.RABBIT)}>토끼귀</Button>
-      <Button onClick={() => setSticker(Sticker.TONGUE)}>메롱</Button>
+      <Button data-sticker={Sticker.RABBIT} onClick={onClickSticker}>
+        토끼귀
+      </Button>
+      <Button data-sticker={Sticker.TONGUE} onClick={onClickSticker}>
+        메롱
+      </Button>
       <Button onClick={toggleCustomFilter}>Custom</Button>
       <CaptureButton>캡쳐</CaptureButton>
       {showCustom ? (
