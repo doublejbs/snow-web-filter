@@ -1,16 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
+import Button from "../../common/Button";
 import getStickerPosition, { Sticker } from "../../utils/getStickerPosition";
 
 interface IProps {
   filter: string;
   sticker: Sticker | null;
+  addImages: (img: string) => void;
 }
 
-const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
+const VideoSection: React.FC<IProps> = ({
+  filter,
+  sticker,
+  addImages
+}): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const [overlay, setOverlay] = useState<HTMLCanvasElement | null>(null);
   const [overlayCC, setOverlayCC] = useState<CanvasRenderingContext2D | null>(
     null
   );
@@ -48,6 +55,7 @@ const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
     }
 
     setVideo(video);
+    setOverlay(overlay);
 
     navigator.mediaDevices
       .getUserMedia({
@@ -93,6 +101,24 @@ const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
     }
   }, [sticker]);
 
+  // capture
+  const takePicture = () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = size.width;
+    canvas.height = size.height;
+
+    if (!context || !video || !overlay) return;
+
+    context.filter = filter;
+    context.drawImage(video, 0, 0, size.width, size.height);
+    context.drawImage(overlay, 0, 0, size.width, size.height);
+
+    const imgUrl = canvas.toDataURL("image/png");
+
+    addImages(imgUrl);
+  };
+
   const startFaceTracker = (sticker: Sticker) => {
     if (!video || !ctrack) return;
     ctrack.start(video);
@@ -117,6 +143,7 @@ const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
     <Container size={size}>
       <Video ref={videoEl} />
       <Overlay ref={overlayEl} />
+      <CaptureButton onClick={takePicture}>캡쳐</CaptureButton>
     </Container>
   );
 };
@@ -129,12 +156,11 @@ interface IVideo {
 const Container = styled.div`
   position: relative;
   width: ${(props: IVideo) => `${props.size.width}px`};
-  height: ${(props: IVideo) => `${props.size.height}px`};
+  min-height: ${(props: IVideo) => `${props.size.height}px`};
 `;
 
 const Video = styled.video`
   width: 100%;
-  height: 100%;
   border: 2px solid lightgray;
   box-sizing: border-box;
 `;
@@ -143,5 +169,11 @@ const Overlay = styled.canvas`
   position: absolute;
   left: 0;
   width: 100%;
-  height: 100%;
+`;
+
+const CaptureButton = styled(Button)`
+  border-radius: 0;
+  width: 100px;
+  margin: 0.5rem auto;
+  text-align: center;
 `;
