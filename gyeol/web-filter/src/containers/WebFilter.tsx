@@ -3,13 +3,17 @@ import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
 import rabbitPng from "../assets/rabbit.png";
+import tonguePng from "../assets/tongue.png";
 
 import VideoSection from "../components/VideoSection";
 import FilterSection from "../components/FilterSection/FilterSection";
 import Gallary from "../components/Gallary";
+import getStickerPosition, { Sticker } from "../utils/getStickerPosition";
 
 const rabbit = new Image();
 rabbit.src = rabbitPng;
+const tongue = new Image();
+tongue.src = tonguePng;
 
 const WebFilter: React.FC = (): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
@@ -37,37 +41,37 @@ const WebFilter: React.FC = (): JSX.Element => {
     }
   }, [ctrack]);
 
-  const startFaceTracker = () => {
+  const startFaceTracker = (sticker: Sticker) => {
     if (!video || !overlay || !ctrack) return;
-    video.play();
     ctrack.start(video);
-    setOverlayCC(overlay.getContext("2d"));
-    drawLoop();
+    drawLoop(sticker);
   };
 
-  const drawLoop = () => {
+  const drawLoop = (sticker: Sticker) => {
     if (!overlay || !ctrack || !overlayCC) return;
-    requestAnimationFrame(drawLoop);
+    requestAnimationFrame(() => drawLoop(sticker));
     overlayCC.clearRect(0, 0, size.width, size.height);
+
     const positions = ctrack.getCurrentPosition();
+
     if (positions) {
-      // get face position
-      const leftEars = positions[0];
-      const rightEars = positions[14];
-      const nose = positions[33];
-      const noseBottom = positions[37];
+      let img;
+      switch (sticker) {
+        case Sticker.RABBIT:
+          img = rabbit;
+          break;
+        case Sticker.TONGUE:
+          img = tongue;
+          break;
+        default:
+          break;
+      }
 
-      const rabbitWidth = (rightEars[0] - leftEars[0]) * 1.3;
-      const rabbitHeight = (rabbit.height * rabbitWidth) / rabbit.width;
+      if (!img) return;
 
-      // draw rabbit
-      overlayCC.drawImage(
-        rabbit,
-        nose[0] - rabbitWidth / 2,
-        nose[1] - rabbitHeight - (noseBottom[1] - nose[1]),
-        rabbitWidth,
-        rabbitHeight
-      );
+      const [x, y, width, height] = getStickerPosition(positions, sticker, img);
+
+      overlayCC.drawImage(img, x, y, width, height);
     }
   };
 
@@ -79,6 +83,7 @@ const WebFilter: React.FC = (): JSX.Element => {
         filter={filter}
         setVideo={setVideo}
         setOverlay={setOverlay}
+        setOverlayCC={setOverlayCC}
       />
       <FilterSection
         setFilter={setFilter}

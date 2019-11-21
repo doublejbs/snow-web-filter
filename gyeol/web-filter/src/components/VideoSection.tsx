@@ -12,6 +12,9 @@ interface IProps {
   filter: string;
   setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
   setOverlay: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
+  setOverlayCC: React.Dispatch<
+    React.SetStateAction<CanvasRenderingContext2D | null>
+  >;
 }
 
 const VideoSection: React.FC<IProps> = ({
@@ -19,7 +22,8 @@ const VideoSection: React.FC<IProps> = ({
   setSize,
   filter,
   setVideo,
-  setOverlay
+  setOverlay,
+  setOverlayCC
 }): JSX.Element => {
   const videoEl = useRef<HTMLVideoElement>(null);
   const overlayEl = useRef<HTMLCanvasElement>(null);
@@ -28,6 +32,11 @@ const VideoSection: React.FC<IProps> = ({
     if (!videoEl || !overlayEl) return;
     const video = videoEl.current;
     const overlay = overlayEl.current;
+    if (overlay) {
+      const overlayCC = overlay.getContext("2d");
+
+      setOverlayCC(overlayCC);
+    }
 
     setVideo(video);
     setOverlay(overlay);

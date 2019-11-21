@@ -4,10 +4,11 @@ import styled from "styled-components";
 import CustomFilter from "./CustomFilter";
 import Button from "./Button";
 import filterToString from "../../utils/filterToString";
+import { Sticker } from "../../utils/getStickerPosition";
 
 interface IProps {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  startFaceTracker: () => void;
+  startFaceTracker: (sticker: Sticker) => void;
 }
 
 export interface IFilter {
@@ -64,10 +65,17 @@ const FilterSection: React.FC<IProps> = ({
     setFilter("blur(2px)");
   };
 
+  const onClickStickerFilter = (sticker: Sticker) => {
+    startFaceTracker(sticker);
+  };
+
   return (
     <Container>
       <Button onClick={onClickFilterButton}>blur</Button>
-      <Button onClick={startFaceTracker}>필터 2</Button>
+      <Button onClick={() => onClickStickerFilter(Sticker.RABBIT)}>
+        토끼귀
+      </Button>
+      <Button onClick={() => onClickStickerFilter(Sticker.TONGUE)}>메롱</Button>
       <Button onClick={() => setShowCustom(!showCustom)}>Custom</Button>
       <CaptureButton>캡쳐</CaptureButton>
       {showCustom ? (
