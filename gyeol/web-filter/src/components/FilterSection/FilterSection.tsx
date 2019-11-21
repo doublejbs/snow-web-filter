@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import CustomFilter from "./CustomFilter";
 import Button from "./Button";
-import { makeFilter } from "../../utils/makeFilter";
+import filterToString from "../../utils/filterToString";
 
 interface IProps {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
@@ -47,7 +47,7 @@ const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
       setTimer(
         setTimeout(() => {
           const newFilter = { ...slideFilter, [id]: value };
-          const newFilterString = makeFilter(newFilter);
+          const newFilterString = filterToString(newFilter);
 
           setTimer(0);
           setSlideFilter(newFilter);
