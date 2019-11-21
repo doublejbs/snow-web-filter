@@ -38,12 +38,14 @@ const VideoSection: React.FC<IProps> = ({
         video: true
       })
       .then((stream: MediaStream) => {
-        if (video) {
+        if (video && overlay) {
           video.srcObject = stream;
           video.onloadedmetadata = (): void => {
             const height = video.videoHeight / (video.videoWidth / size.width);
             video.width = size.width;
             video.height = size.height;
+            overlay.width = size.width;
+            overlay.height = size.height;
             setSize({ ...size, height });
           };
 

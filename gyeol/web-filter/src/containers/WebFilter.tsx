@@ -2,9 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
+import rabbitPng from "../assets/rabbit.png";
+
 import VideoSection from "../components/VideoSection";
 import FilterSection from "../components/FilterSection/FilterSection";
 import Gallary from "../components/Gallary";
+
+const rabbit = new Image();
+rabbit.src = rabbitPng;
 
 const WebFilter: React.FC = (): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
@@ -44,10 +49,25 @@ const WebFilter: React.FC = (): JSX.Element => {
     if (!overlay || !ctrack || !overlayCC) return;
     requestAnimationFrame(drawLoop);
     overlayCC.clearRect(0, 0, size.width, size.height);
-    console.log("11");
-    if (ctrack.getCurrentPosition()) {
-      const positions = ctrack.getCurrentPosition();
-      console.log(positions);
+    const positions = ctrack.getCurrentPosition();
+    if (positions) {
+      // get face position
+      const leftEars = positions[0];
+      const rightEars = positions[14];
+      const nose = positions[33];
+      const noseBottom = positions[37];
+
+      const rabbitWidth = (rightEars[0] - leftEars[0]) * 1.3;
+      const rabbitHeight = (rabbit.height * rabbitWidth) / rabbit.width;
+
+      // draw rabbit
+      overlayCC.drawImage(
+        rabbit,
+        nose[0] - rabbitWidth / 2,
+        nose[1] - rabbitHeight - (noseBottom[1] - nose[1]),
+        rabbitWidth,
+        rabbitHeight
+      );
     }
   };
 
