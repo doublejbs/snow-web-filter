@@ -55,7 +55,7 @@ function createButtons(x, y){
         itemName = 'fox';
     });
 
-    button4 = createButton('캡쳐', 1);
+    button4 = createButton('촬영');
 
     button4.position(x + width * 3 / 4, y + height);
     button4.mousePressed(function(){
