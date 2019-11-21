@@ -1,29 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import clmtrackr from "clmtrackr";
 
-import VideoSection from "../components/VideoSection";
+import VideoSection from "../components/VideoSection/VideoSection";
 import FilterSection from "../components/FilterSection/FilterSection";
-import Gallary from "../components/Gallary";
+import Gallary from "../components/Gallary/Gallary";
+import { Sticker } from "../utils/getStickerPosition";
 
 const WebFilter: React.FC = (): JSX.Element => {
-  const [size, setSize] = useState<{ width: number; height: number }>({
-    width: 400,
-    height: 250
-  });
+  const [sticker, setSticker] = useState<Sticker | null>(null);
   const [filter, setFilter] = useState<string>("");
-
-  // clmtrackr init setting
-  useEffect(() => {
-    const ctrack = new clmtrackr.tracker();
-
-    ctrack.init();
-  }, []);
 
   return (
     <Container>
-      <VideoSection setSize={setSize} size={size} filter={filter} />
-      <FilterSection setFilter={setFilter} />
+      <VideoSection filter={filter} sticker={sticker} />
+      <FilterSection setSticker={setSticker} setFilter={setFilter} />
       <Gallary />
     </Container>
   );
