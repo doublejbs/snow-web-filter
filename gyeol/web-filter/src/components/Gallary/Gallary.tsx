@@ -9,7 +9,7 @@ const Gallary: React.FC<IProps> = ({ images }): JSX.Element => {
   return (
     <Container>
       {images.map((image: string) => (
-        <img src={image} key={image} />
+        <img alt="capture" src={image} key={image} />
       ))}
     </Container>
   );
