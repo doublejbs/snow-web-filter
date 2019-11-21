@@ -1,59 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/tracking-min.js"></script>
   <script src="https://rawgit.com/eduardolundgren/tracking.js/master/build/data/face-min.js"></script>
-  <link rel = "stylesheet" href="css/bootstrap.css">
-  <link rel = "stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div class="copy"  id="container"> 
+  <div class="copy" id="container">
     <center>
-        <p> <h1> ##<a id="url_a_id" target=_blank><span id="url_id"></span></a> ## </h1></p>
+      <p>
+        <h1> ##<a id="url_a_id" target=_blank><span id="url_id"></span></a> ## </h1>
+      </p>
     </center>
   </div>
   <div id="container">
-    <video id="video" width="320" height="240"   autoplay muted ></video>
+    <video id="video" width="320" height="240" autoplay muted></video>
     <canvas id="canvas" width="320" height="240"></canvas>
     <video id="remoteVideo" width="320" height="240" autoplay></video>
   </div>
   <br>
   <div class="demo-frame" id="container">
-      <center>
-          <fieldset id="photo-filter">
-              <legend>Color filter</legend>
-              <input type="radio" name="filter" id="normal" value="none" checked="checked">
-              <label for="normal">Normal</label>
-              <input type="radio" name="filter" id="grayscale" value="grayscale(100%)">
-              <label for="grayscale">Grayscale</label>
-              <input type="radio" name="filter" id="sepia" value="sepia(100%)">
-              <label for="sepia">Sepia</label>
-              <input type="radio" name="filter" id="invert" value="invert(100%)">
-              <label for="invert">Invert</label>
-              <input type="radio" name="filter" id="hue" value="hue-rotate(90deg)">
-              <label for="hue">Hue</lable>
-              <input type="radio" name="filter" id="blur" value="blur(10px)">
-              <label for="blur">blur</label>
-              <input type="radio" name="filter" id="contrast" value="contrast(200%)">
-              <label for="contrast">Contrast</lable>  
-         </fieldset>
-         <br>
-         <button id="first-mask" class="btn btn-dark">첫번째 마스크</button>
-         <button id="second-mask" class="btn btn-dark">두번째 마스크</button>
-         <button id="third-mask" class="btn btn-dark">세번째 마스크</button>
-         <br><br><br>
-         <button id="photo-button" class="btn btn-dark">Take photo</button>
+    <center>
+      <fieldset id="photo-filter">
+        <legend>Color filter</legend>
+        <input type="radio" name="filter" id="normal" value="none" checked="checked">
+        <label for="normal">Normal</label>
+        <input type="radio" name="filter" id="grayscale" value="grayscale(100%)">
+        <label for="grayscale">Grayscale</label>
+        <input type="radio" name="filter" id="sepia" value="sepia(100%)">
+        <label for="sepia">Sepia</label>
+        <input type="radio" name="filter" id="invert" value="invert(100%)">
+        <label for="invert">Invert</label>
+        <input type="radio" name="filter" id="hue" value="hue-rotate(90deg)">
+        <label for="hue">Hue</lable>
+          <input type="radio" name="filter" id="blur" value="blur(10px)">
+          <label for="blur">blur</label>
+          <input type="radio" name="filter" id="contrast" value="contrast(200%)">
+          <label for="contrast">Contrast</lable>
+      </fieldset>
+      <br>
+      <button id="first-mask" class="btn btn-dark">첫번째 마스크</button>
+      <button id="second-mask" class="btn btn-dark">두번째 마스크</button>
+      <button id="third-mask" class="btn btn-dark">세번째 마스크</button>
+      <br><br><br>
+      <button id="photo-button" class="btn btn-dark">Take photo</button>
       <button id="clear-button" class="btn btn-dark">Clear</button>
-      </center>
+    </center>
   </div>
+  <div class="img-frame" id ="photos"></div>
   <div id="container">
-	<h2 id="status"> </h2>
-  </div>  
+    <h2 id="status"> </h2>
+  </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script type='text/javascript' src='js/main.js'></script>
   <script type='text/javascript' src='js/bootstrap.js'></script>
 </body>
+
 </html>

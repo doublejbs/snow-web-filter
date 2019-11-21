@@ -50,6 +50,10 @@
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+.img-frame{
+  margin: 550px 0 0 0;
+}
+
 #video, #canvas {
   margin-left: 25%;
   margin-top: 20px;
@@ -60,3 +64,4 @@
   margin-top: 20px;
   position: absolute;
 } 
+
