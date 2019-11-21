@@ -8,8 +8,8 @@ interface IProps {
 const Gallary: React.FC<IProps> = ({ images }): JSX.Element => {
   return (
     <Container>
-      {images.map((image: string, key: number) => (
-        <img src={image} key={key} />
+      {images.map((image: string) => (
+        <img src={image} key={image} />
       ))}
     </Container>
   );
