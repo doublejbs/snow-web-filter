@@ -4,36 +4,52 @@ let detections;
 
 const detectionOptions = {
     withLandmarks: true,
-    withDescriptors: false,
-}
+    withDescriptors: false
+};
 
 function setup() {
-    var cnv = createCanvas(360, 270);
-    var x = (windowWidth - width) / 2;
-    var y = (windowHeight - height) / 2;
-    
+    const x = (windowWidth - width) / 2;
+    const y = (windowHeight - height) / 2;
+
+    initCanvas(x, y);
+    createButtons(x, y);
+    initVideo();
+}
+
+function initCanvas(x, y) {
+    const cnv = createCanvas(360, 270);
+
+    cnv.position(x, y);
+}
+
+function createButtons(x, y){
     button1 = createButton('item1');
+
     button1.position(x, y + height);
     button1.mousePressed(changeBG);
 
     button2 = createButton('item2');
+
     button2.position(x + width / 4, y + height);
     button2.mousePressed(changeBG);
 
     button3 = createButton('item3');
+
     button3.position(x + width * 2 / 4, y + height);
     button3.mousePressed(changeBG);
 
     button4 = createButton('item4');
+
     button4.position(x + width * 3 / 4, y + height);
     button4.mousePressed(changeBG);
+}
 
-    cnv.position(x, y);
+function initVideo(){
     video = createCapture(VIDEO);
+
     video.size(width, height);
-    video.hide(); 
+    video.hide();
     faceapi = ml5.faceApi(video, detectionOptions, modelReady);
-    textAlign(RIGHT);
 }
 
 function modelReady() {
@@ -47,16 +63,19 @@ function gotResults(err, result) {
         console.log(err);
         return;
     }
+
     detections = result;
     background(255);
     image(video, 0, 0, width, height);
-    if (detections) {
-        if (detections.length > 0) {
-            drawBox(detections);
-            drawLandmarks(detections);
-        }
+
+    if (detections && detections.length > 0) {
+        drawBox(detections);
+        drawLandmarks(detections);
     }
-    faceapi.detect(gotResults);
+
+    requestAnimationFrame(function () {
+        faceapi.detect(gotResults)
+    });
 }
 
 function drawBox(detections) {
@@ -80,12 +99,7 @@ function drawLandmarks(detections) {
     strokeWeight(2);
 
     for (let i = 0; i < detections.length; i++) {
-        const mouth = detections[i].parts.mouth;
-        const nose = detections[i].parts.nose;
-        const leftEye = detections[i].parts.leftEye;
-        const rightEye = detections[i].parts.rightEye;
-        const rightEyeBrow = detections[i].parts.rightEyeBrow;
-        const leftEyeBrow = detections[i].parts.leftEyeBrow;
+        const { mouth, nose, leftEye, rightEye, rightEyeBrow, leftEyeBrow } = detections[i].parts;
 
         drawPart(mouth, true);
         drawPart(nose, false);
@@ -96,13 +110,15 @@ function drawLandmarks(detections) {
     }
 }
 
-function drawPart(feature, closed) {
+function drawPart(features, closed) {
     beginShape();
-    for (let i = 0; i < feature.length; i++) {
-        const x = feature[i]._x;
-        const y = feature[i]._y;
+
+    for (const feature of features) {
+        const { _x: x, _y: y } = feature;
+
         vertex(x, y);
     }
+    
     if (closed === true) {
         endShape(CLOSE);
     } else {
@@ -111,14 +127,17 @@ function drawPart(feature, closed) {
 }
 
 function drawImageList(imageList){
-    var xIdx = 0;
-    for (let i = 0; i<imageList.length; i++){
+    let xIdx = 0;
+
+    for (let i = 0; i < imageList.length; i++){
         Image(imageList[i], xIdx, height);
+
         xIdx += imageList[i].width;
     }
 }
 
 function changeBG() {
-    let val = random(255);
+    const val = random(255);
+
     background(val);
 }
