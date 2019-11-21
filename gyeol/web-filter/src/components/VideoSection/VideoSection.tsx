@@ -7,10 +7,20 @@ import getStickerPosition, { Sticker } from "../../utils/getStickerPosition";
 interface IProps {
   filter: string;
   sticker: Sticker | null;
+  capture: boolean;
+  setCapture: React.Dispatch<React.SetStateAction<boolean>>;
+  addImages: (img: string) => void;
 }
 
-const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
+const VideoSection: React.FC<IProps> = ({
+  filter,
+  sticker,
+  capture,
+  setCapture,
+  addImages
+}): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const [overlay, setOverlay] = useState<HTMLCanvasElement | null>(null);
   const [overlayCC, setOverlayCC] = useState<CanvasRenderingContext2D | null>(
     null
   );
@@ -48,6 +58,7 @@ const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
     }
 
     setVideo(video);
+    setOverlay(overlay);
 
     navigator.mediaDevices
       .getUserMedia({
@@ -92,6 +103,27 @@ const VideoSection: React.FC<IProps> = ({ filter, sticker }): JSX.Element => {
       startFaceTracker(sticker);
     }
   }, [sticker]);
+
+  // capture
+  useEffect(() => {
+    if (capture) {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.width = size.width;
+      canvas.height = size.height;
+
+      if (!context || !video || !overlay) return;
+
+      context.filter = filter;
+      context.drawImage(video, 0, 0, size.width, size.height);
+      context.drawImage(overlay, 0, 0, size.width, size.height);
+
+      const imgUrl = canvas.toDataURL("image/png");
+
+      addImages(imgUrl);
+      setCapture(false);
+    }
+  }, [capture]);
 
   const startFaceTracker = (sticker: Sticker) => {
     if (!video || !ctrack) return;
