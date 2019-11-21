@@ -10,18 +10,27 @@ interface IProps {
     }>
   >;
   filter: string;
+  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
+  setOverlay: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
 }
 
 const VideoSection: React.FC<IProps> = ({
   size,
   setSize,
-  filter
+  filter,
+  setVideo,
+  setOverlay
 }): JSX.Element => {
   const videoEl = useRef<HTMLVideoElement>(null);
+  const overlayEl = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (!videoEl) return;
+    if (!videoEl || !overlayEl) return;
     const video = videoEl.current;
+    const overlay = overlayEl.current;
+
+    setVideo(video);
+    setOverlay(overlay);
 
     navigator.mediaDevices
       .getUserMedia({
@@ -33,7 +42,8 @@ const VideoSection: React.FC<IProps> = ({
           video.srcObject = stream;
           video.onloadedmetadata = (): void => {
             const height = video.videoHeight / (video.videoWidth / size.width);
-
+            video.width = size.width;
+            video.height = size.height;
             setSize({ ...size, height });
           };
 
@@ -57,21 +67,34 @@ const VideoSection: React.FC<IProps> = ({
   }, [filter]);
 
   return (
-    <Container>
-      <Video ref={videoEl} size={size} />
+    <Container size={size}>
+      <Video ref={videoEl} />
+      <Overlay ref={overlayEl} />
     </Container>
   );
 };
 
 export default VideoSection;
 
-const Container = styled.div``;
-
 interface IVideo {
   size: { width: number; height: number };
 }
-const Video = styled.video`
+const Container = styled.div`
+  position: relative;
   width: ${(props: IVideo) => `${props.size.width}px`};
   height: ${(props: IVideo) => `${props.size.height}px`};
+`;
+
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
   border: 2px solid lightgray;
+  box-sizing: border-box;
+`;
+
+const Overlay = styled.canvas`
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;

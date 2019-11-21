@@ -7,6 +7,7 @@ import filterToString from "../../utils/filterToString";
 
 interface IProps {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
+  startFaceTracker: () => void;
 }
 
 export interface IFilter {
@@ -21,7 +22,10 @@ export interface IFilter {
   opacity: number;
 }
 
-const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
+const FilterSection: React.FC<IProps> = ({
+  setFilter,
+  startFaceTracker
+}): JSX.Element => {
   const [showCustom, setShowCustom] = useState<boolean>(false);
 
   const [slideFilter, setSlideFilter] = useState<IFilter>({
@@ -63,7 +67,7 @@ const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
   return (
     <Container>
       <Button onClick={onClickFilterButton}>blur</Button>
-      <Button>필터 2</Button>
+      <Button onClick={startFaceTracker}>필터 2</Button>
       <Button onClick={() => setShowCustom(!showCustom)}>Custom</Button>
       <CaptureButton>캡쳐</CaptureButton>
       {showCustom ? (
