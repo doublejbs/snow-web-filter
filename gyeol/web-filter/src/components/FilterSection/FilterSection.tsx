@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 
 import CustomFilter from "./CustomFilter";
@@ -7,8 +7,9 @@ import filterToString from "../../utils/filterToString";
 import { Sticker } from "../../utils/getStickerPosition";
 
 interface IProps {
+  setSticker: React.Dispatch<React.SetStateAction<Sticker | null>>;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  startFaceTracker: (sticker: Sticker) => void;
+  // startFaceTracker: (sticker: Sticker) => void;
 }
 
 export interface IFilter {
@@ -25,7 +26,8 @@ export interface IFilter {
 
 const FilterSection: React.FC<IProps> = ({
   setFilter,
-  startFaceTracker
+  setSticker
+  // startFaceTracker
 }): JSX.Element => {
   const [showCustom, setShowCustom] = useState<boolean>(false);
 
@@ -43,40 +45,41 @@ const FilterSection: React.FC<IProps> = ({
     opacity: 100
   });
 
-  const [timer, setTimer] = useState<number>(0);
-  const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  let flag = true;
 
-    if (!timer) {
-      setTimer(
+  const sliderChangeHandler = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+
+      if (flag) {
+        flag = false;
         setTimeout(() => {
           const newFilter = { ...slideFilter, [name]: value };
           const newFilterString = filterToString(newFilter);
 
-          setTimer(0);
+          flag = true;
           setSlideFilter(newFilter);
           setFilter(newFilterString);
-        }, 50)
-      );
-    }
-  };
+        }, 50);
+      }
+    },
+    [flag, filterToString, setSlideFilter, setFilter]
+  );
 
-  const onClickFilterButton = () => {
+  const onClickFilterButton = useCallback(() => {
     setFilter("blur(2px)");
-  };
+  }, []);
 
-  const onClickStickerFilter = (sticker: Sticker) => {
-    startFaceTracker(sticker);
-  };
+  const toggleCustomFilter = useCallback(() => {
+    setShowCustom(!showCustom);
+  }, [showCustom]);
 
   return (
     <Container>
       <Button onClick={onClickFilterButton}>blur</Button>
-      <Button onClick={() => onClickStickerFilter(Sticker.RABBIT)}>
-        토끼귀
-      </Button>
-      <Button onClick={() => onClickStickerFilter(Sticker.TONGUE)}>메롱</Button>
-      <Button onClick={() => setShowCustom(!showCustom)}>Custom</Button>
+      <Button onClick={() => setSticker(Sticker.RABBIT)}>토끼귀</Button>
+      <Button onClick={() => setSticker(Sticker.TONGUE)}>메롱</Button>
+      <Button onClick={toggleCustomFilter}>Custom</Button>
       <CaptureButton>캡쳐</CaptureButton>
       {showCustom ? (
         <CustomFilter

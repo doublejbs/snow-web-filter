@@ -51,7 +51,7 @@ const SilderFilter: React.FC<IProps> = ({
         max={max}
         name={name}
         value={value}
-        onChange={e => sliderChangeHandler(e)}
+        onChange={sliderChangeHandler}
       />
       <label htmlFor={name}>
         {name} : {value + unit}

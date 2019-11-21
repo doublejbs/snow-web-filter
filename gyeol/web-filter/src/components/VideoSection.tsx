@@ -1,5 +1,8 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import clmtrackr from "clmtrackr";
+
+import getStickerPosition, { Sticker } from "../utils/getStickerPosition";
 
 interface IProps {
   size: { width: number; height: number };
@@ -10,23 +13,38 @@ interface IProps {
     }>
   >;
   filter: string;
-  setVideo: React.Dispatch<React.SetStateAction<HTMLVideoElement | null>>;
-  setOverlay: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>;
-  setOverlayCC: React.Dispatch<
-    React.SetStateAction<CanvasRenderingContext2D | null>
-  >;
+  sticker: Sticker | null;
 }
 
 const VideoSection: React.FC<IProps> = ({
   size,
   setSize,
   filter,
-  setVideo,
-  setOverlay,
-  setOverlayCC
+  sticker
 }): JSX.Element => {
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const [overlay, setOverlay] = useState<HTMLCanvasElement | null>(null);
+  const [overlayCC, setOverlayCC] = useState<CanvasRenderingContext2D | null>(
+    null
+  );
+
   const videoEl = useRef<HTMLVideoElement>(null);
   const overlayEl = useRef<HTMLCanvasElement>(null);
+
+  const [ctrack, setCtrack] = useState<clmtrackr.tracker | null>(null);
+
+  // clmtrackr init setting
+  useEffect(() => {
+    if (!ctrack) {
+      const ct = new clmtrackr.tracker({
+        faceDetection: {
+          useWebWorkers: false
+        }
+      });
+      setCtrack(ct);
+      ct.init();
+    }
+  }, [ctrack]);
 
   useEffect(() => {
     if (!videoEl || !overlayEl) return;
@@ -69,6 +87,7 @@ const VideoSection: React.FC<IProps> = ({
       });
   }, []);
 
+  // filter가 바뀔 때,
   useEffect(() => {
     const video = videoEl.current;
 
@@ -76,6 +95,33 @@ const VideoSection: React.FC<IProps> = ({
 
     video.style.filter = filter;
   }, [filter]);
+
+  // sticker가 바뀔 때,
+  useEffect(() => {
+    if (sticker) {
+      startFaceTracker(sticker);
+    }
+  }, [sticker]);
+
+  const startFaceTracker = (sticker: Sticker) => {
+    if (!video || !overlay || !ctrack) return;
+    ctrack.start(video);
+    drawLoop(sticker);
+  };
+
+  const drawLoop = (sticker: Sticker) => {
+    if (!overlay || !ctrack || !overlayCC) return;
+    requestAnimationFrame(() => drawLoop(sticker));
+    overlayCC.clearRect(0, 0, size.width, size.height);
+
+    const positions = ctrack.getCurrentPosition();
+
+    if (positions) {
+      const [x, y, width, height, img] = getStickerPosition(positions, sticker);
+
+      overlayCC.drawImage(img, x, y, width, height);
+    }
+  };
 
   return (
     <Container size={size}>

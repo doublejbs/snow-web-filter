@@ -1,8 +1,15 @@
+import rabbitPng from "../assets/rabbit.png";
+import tonguePng from "../assets/tongue.png";
+
+const rabbit = new Image();
+rabbit.src = rabbitPng;
+const tongue = new Image();
+tongue.src = tonguePng;
+
 const getStickerPosition = (
   positions: [number, number][],
-  sticker: Sticker,
-  img: HTMLImageElement
-): number[] => {
+  sticker: Sticker
+): [number, number, number, number, HTMLImageElement] => {
   switch (sticker) {
     case Sticker.RABBIT:
       const leftEars = positions[0];
@@ -11,30 +18,30 @@ const getStickerPosition = (
       const noseBottom = positions[37];
 
       const rabbitWidth = (rightEars[0] - leftEars[0]) * 1.3;
-      const rabbitHeight = (img.height * rabbitWidth) / img.width;
+      const rabbitHeight = (rabbit.height * rabbitWidth) / rabbit.width;
       return [
         nose[0] - rabbitWidth / 2,
         nose[1] - rabbitHeight - (noseBottom[1] - nose[1]),
         rabbitWidth,
-        rabbitHeight
+        rabbitHeight,
+        rabbit
       ];
     case Sticker.TONGUE:
       const topLip = positions[60];
       const bottomLip = positions[57];
       const tongueWidth = positions[50][0] - positions[44][0];
-      const tongueHeight = (img.height * tongueWidth) / img.width;
+      const tongueHeight = (tongue.height * tongueWidth) / tongue.width;
 
       if (bottomLip[1] - topLip[1] > 5) {
         return [
           topLip[0] - tongueWidth / 2,
           (topLip[1] + bottomLip[1]) / 2,
           tongueWidth,
-          tongueHeight
+          tongueHeight,
+          tongue
         ];
       }
-      return [0, 0, 0, 0];
-    default:
-      return [0, 0, 0, 0];
+      return [0, 0, 0, 0, tongue];
   }
 };
 
