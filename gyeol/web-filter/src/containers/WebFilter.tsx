@@ -9,7 +9,6 @@ import { Sticker } from "../utils/getStickerPosition";
 const WebFilter: React.FC = (): JSX.Element => {
   const [sticker, setSticker] = useState<Sticker | null>(null);
   const [filter, setFilter] = useState<string>("");
-  const [capture, setCapture] = useState<boolean>(false);
   const [images, setImages] = useState<string[]>([]);
 
   const addImage = (img: string): void => {
@@ -18,18 +17,8 @@ const WebFilter: React.FC = (): JSX.Element => {
 
   return (
     <Container>
-      <VideoSection
-        filter={filter}
-        sticker={sticker}
-        capture={capture}
-        setCapture={setCapture}
-        addImages={addImage}
-      />
-      <FilterSection
-        setSticker={setSticker}
-        setFilter={setFilter}
-        setCapture={setCapture}
-      />
+      <VideoSection filter={filter} sticker={sticker} addImages={addImage} />
+      <FilterSection setSticker={setSticker} setFilter={setFilter} />
       <Gallary images={images} />
     </Container>
   );

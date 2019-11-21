@@ -9,7 +9,6 @@ import { Sticker } from "../../utils/getStickerPosition";
 interface IProps {
   setSticker: React.Dispatch<React.SetStateAction<Sticker | null>>;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  setCapture: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IFilter {
@@ -26,8 +25,7 @@ export interface IFilter {
 
 const FilterSection: React.FC<IProps> = ({
   setFilter,
-  setSticker,
-  setCapture
+  setSticker
 }): JSX.Element => {
   const [showCustom, setShowCustom] = useState<boolean>(false);
 
@@ -89,7 +87,6 @@ const FilterSection: React.FC<IProps> = ({
         메롱
       </Button>
       <Button onClick={toggleCustomFilter}>Custom</Button>
-      <CaptureButton onClick={() => setCapture(true)}>캡쳐</CaptureButton>
       {showCustom ? (
         <CustomFilter
           slideFilter={slideFilter}
@@ -108,8 +105,4 @@ const Container = styled.div`
   padding: 1rem;
   display: flex;
   flex-wrap: wrap;
-`;
-
-const CaptureButton = styled(Button)`
-  border-radius: 0;
 `;
