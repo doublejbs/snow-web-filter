@@ -3,7 +3,7 @@ import styled from "styled-components";
 import clmtrackr from "clmtrackr";
 
 import VideoSection from "../components/VideoSection";
-import FilterSection from "../components/FilterSection";
+import FilterSection from "../components/FilterSection/FilterSection";
 import Gallary from "../components/Gallary";
 
 const WebFilter: React.FC = (): JSX.Element => {

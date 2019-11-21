@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
-import Slider from "./atoms/Slider";
+import Slider from "./Slider";
 import { IFilter } from "./FilterSection";
 
 interface IProps {

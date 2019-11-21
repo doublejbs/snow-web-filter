@@ -1,4 +1,4 @@
-import { IFilter } from "../components/FilterSection";
+import { IFilter } from "../components/FilterSection/FilterSection";
 
 // filter data 생성
 export const makeFilter = (filter: IFilter) => {

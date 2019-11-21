@@ -2,8 +2,8 @@ import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 
 import CustomFilter from "./CustomFilter";
-import Button from "./atoms/Button";
-import { makeFilter } from "../utils/makeFilter";
+import Button from "./Button";
+import { makeFilter } from "../../utils/makeFilter";
 
 interface IProps {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
