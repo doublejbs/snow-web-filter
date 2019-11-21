@@ -39,20 +39,19 @@ const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
   });
 
   const [timer, setTimer] = useState<number>(0);
-
   const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
+    const { name, value } = event.target;
 
     if (!timer) {
       setTimer(
         setTimeout(() => {
-          const newFilter = { ...slideFilter, [id]: value };
+          const newFilter = { ...slideFilter, [name]: value };
           const newFilterString = filterToString(newFilter);
 
           setTimer(0);
           setSlideFilter(newFilter);
           setFilter(newFilterString);
-        }, 100)
+        }, 50)
       );
     }
   };

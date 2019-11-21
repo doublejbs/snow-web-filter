@@ -2,7 +2,7 @@ import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 
 interface IProps {
-  id: string;
+  name: string;
   value: number;
   sliderChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -16,23 +16,28 @@ const Container = styled.div`
   }
 `;
 
-const SilderFilter: React.FC<IProps> = ({ id, value, sliderChangeHandler }) => {
+const SilderFilter: React.FC<IProps> = ({
+  name,
+  value,
+  sliderChangeHandler
+}) => {
   let max = 100;
   let min = 0;
   let unit = "%";
-  if (id === "huRotate") {
+
+  if (name === "huRotate") {
     max = 90;
     min = 0;
     unit = "deg";
-  } else if (id === "blur") {
+  } else if (name === "blur") {
     max = 10;
     min = 0;
     unit = "px";
   } else if (
-    id === "contrast" ||
-    id === "brightness" ||
-    id === "saturate" ||
-    id === "opacity"
+    name === "contrast" ||
+    name === "brightness" ||
+    name === "saturate" ||
+    name === "opacity"
   ) {
     max = 200;
     min = 0;
@@ -42,15 +47,14 @@ const SilderFilter: React.FC<IProps> = ({ id, value, sliderChangeHandler }) => {
     <Container>
       <input
         type="range"
-        name="slider"
         min={min}
         max={max}
-        id={id}
+        name={name}
         value={value}
         onChange={e => sliderChangeHandler(e)}
       />
-      <label htmlFor={id}>
-        {id} : {value + unit}
+      <label htmlFor={name}>
+        {name} : {value + unit}
       </label>
     </Container>
   );

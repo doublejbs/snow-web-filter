@@ -17,7 +17,7 @@ const CustomFilter: React.FC<IProps> = ({
       {Object.keys(slideFilter).map((filter: string) => (
         <Slider
           key={filter}
-          id={filter}
+          name={filter}
           value={slideFilter[filter]}
           sliderChangeHandler={sliderChangeHandler}
         />
