@@ -1,7 +1,9 @@
 let faceapi;
 let video;
 let detections;
-let star, heart, fox;
+let star;
+let heart; 
+let fox;
 let itemName = '';
 
 const detectionOptions = {
@@ -95,11 +97,7 @@ function drawLandmarks(detections) {
     for (let i = 0; i < detections.length; i++) {
         const { mouth, nose, leftEye, rightEye, rightEyeBrow, leftEyeBrow } = detections[i].parts;
         
-        if (itemName === 'star'){
-            drawPart(leftEye, true);
-            drawPart(rightEye, true);
-        }
-        else if (itemName === 'heart'){
+        if (itemName === 'star' || itemName === 'heart'){
             drawPart(leftEye, true);
             drawPart(rightEye, true);
         }
