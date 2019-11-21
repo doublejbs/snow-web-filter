@@ -8,6 +8,9 @@ import Gallary from "../components/Gallary";
 
 const WebFilter: React.FC = (): JSX.Element => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const [overlay, setOverlay] = useState<HTMLCanvasElement | null>(null);
+
+  const [ctrack, setCtrack] = useState<clmtrackr.tracker | null>(null);
   const [size, setSize] = useState<{ width: number; height: number }>({
     width: 400,
     height: 250
@@ -15,9 +18,13 @@ const WebFilter: React.FC = (): JSX.Element => {
 
   // clmtrackr init setting
   useEffect(() => {
-    const ctrack = new clmtrackr.tracker();
-    ctrack.init();
-  }, []);
+    if (!ctrack) {
+      const ct = new clmtrackr.tracker();
+      setCtrack(ct);
+    } else {
+      ctrack.init();
+    }
+  }, [ctrack]);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -36,6 +43,7 @@ const WebFilter: React.FC = (): JSX.Element => {
           // 준비 되면 play
           video.oncanplaythrough = (): void => {
             video.play();
+            startTracker();
           };
         }
       })
@@ -43,9 +51,35 @@ const WebFilter: React.FC = (): JSX.Element => {
         console.log(`ERROR : ${err}`);
       });
   }, [video]);
+
+  const startTracker = () => {
+    if (!ctrack || !video) return;
+    video.play();
+    ctrack.start(video);
+    drawRabbitEars();
+  };
+
+  const drawRabbitEars = () => {
+    if (!overlay || !ctrack) return;
+    // 화면에 표시되는 동안만, frame에 맞게 반복 실행
+    // requestAnimationFrame(drawRabbitEars);
+    // overlay 초기화
+    const overlayCC = overlay.getContext("2d");
+    console.log(ctrack);
+    if (!overlayCC) return;
+    overlayCC.clearRect(0, 0, size.width, size.height);
+
+    if (ctrack.getCurrentPosition()) {
+      console.log("!!");
+      // get points
+      const positions = ctrack.getCurrentPosition();
+      console.log(positions);
+    }
+  };
+
   return (
     <Container>
-      <VideoSection setVideo={setVideo} size={size} />
+      <VideoSection setVideo={setVideo} setOverlay={setOverlay} size={size} />
       <FilterSection />
       <Gallary />
     </Container>
