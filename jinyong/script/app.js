@@ -33,14 +33,14 @@ function initCanvas(x, y) {
 }
 
 function createButtons(x, y){
-    button1 = createButton('item1');
+    button1 = createButton('별');
 
     button1.position(x, y + height);
     button1.mousePressed(function(){
         itemName = 'star';
     });
     
-    button2 = createButton('item2');
+    button2 = createButton('하트');
 
     button2.position(x + width / 4, y + height);
     button2.mousePressed(function(){
@@ -54,7 +54,7 @@ function createButtons(x, y){
         itemName = 'fox';
     });
 
-    button4 = createButton('item4');
+    button4 = createButton('촬영');
 
     button4.position(x + width * 3 / 4, y + height);
     button4.mousePressed();
