@@ -5,6 +5,7 @@ let star;
 let heart; 
 let fox;
 let itemName = '';
+let isPlaying = true;
 
 const detectionOptions = {
     withLandmarks: true,
@@ -54,10 +55,20 @@ function createButtons(x, y){
         itemName = 'fox';
     });
 
-    button4 = createButton('캡쳐');
+    button4 = createButton('캡쳐', 1);
 
     button4.position(x + width * 3 / 4, y + height);
-    button4.mousePressed();
+    button4.mousePressed(function(){
+        if (isPlaying) {
+            isPlaying = false;
+            video.stop();
+            saveCanvas('picture', 'jpg');
+        }
+        else {
+            isPlaying = true;
+            video.loop();
+        }
+    });
 }
 
 function initVideo(){
