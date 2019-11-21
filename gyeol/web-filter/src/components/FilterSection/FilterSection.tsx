@@ -38,13 +38,23 @@ const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
     opacity: 100
   });
 
+  const [timer, setTimer] = useState<number>(0);
+
   const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
-    const newFilter = { ...slideFilter, [id]: value };
-    const newFilterString = makeFilter(newFilter);
 
-    setSlideFilter(newFilter);
-    setFilter(newFilterString);
+    if (!timer) {
+      setTimer(
+        setTimeout(() => {
+          const newFilter = { ...slideFilter, [id]: value };
+          const newFilterString = makeFilter(newFilter);
+
+          setTimer(0);
+          setSlideFilter(newFilter);
+          setFilter(newFilterString);
+        }, 100)
+      );
+    }
   };
 
   const onClickFilterButton = () => {
