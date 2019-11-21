@@ -11,17 +11,19 @@ const WebFilter: React.FC = (): JSX.Element => {
     width: 400,
     height: 250
   });
+  const [filter, setFilter] = useState<string>("");
 
   // clmtrackr init setting
   useEffect(() => {
     const ctrack = new clmtrackr.tracker();
+
     ctrack.init();
   }, []);
 
   return (
     <Container>
-      <VideoSection setSize={setSize} size={size} />
-      <FilterSection />
+      <VideoSection setSize={setSize} size={size} filter={filter} />
+      <FilterSection setFilter={setFilter} />
       <Gallary />
     </Container>
   );

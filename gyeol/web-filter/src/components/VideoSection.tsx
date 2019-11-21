@@ -9,9 +9,14 @@ interface IProps {
       height: number;
     }>
   >;
+  filter: string;
 }
 
-const VideoSection: React.FC<IProps> = ({ size, setSize }): JSX.Element => {
+const VideoSection: React.FC<IProps> = ({
+  size,
+  setSize,
+  filter
+}): JSX.Element => {
   const videoEl = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -28,6 +33,7 @@ const VideoSection: React.FC<IProps> = ({ size, setSize }): JSX.Element => {
           video.srcObject = stream;
           video.onloadedmetadata = (): void => {
             const height = video.videoHeight / (video.videoWidth / size.width);
+
             setSize({ ...size, height });
           };
 
@@ -41,6 +47,14 @@ const VideoSection: React.FC<IProps> = ({ size, setSize }): JSX.Element => {
         console.log(`ERROR : ${err}`);
       });
   }, []);
+
+  useEffect(() => {
+    const video = videoEl.current;
+
+    if (!video) return;
+
+    video.style.filter = filter;
+  }, [filter]);
 
   return (
     <Container>
