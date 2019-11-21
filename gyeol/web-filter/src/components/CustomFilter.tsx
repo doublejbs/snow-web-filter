@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Slider from "./atoms/Slider";
 import { IFilter } from "./FilterSection";
 
 interface IProps {
   slideFilter: IFilter;
-  sliderChangeHandler: (e: any) => void;
+  sliderChangeHandler: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomFilter: React.FC<IProps> = ({
@@ -14,11 +14,6 @@ const CustomFilter: React.FC<IProps> = ({
 }): JSX.Element => {
   return (
     <Container>
-      <Slider
-        id="grayscale"
-        value={slideFilter.grayscale}
-        sliderChangeHandler={sliderChangeHandler}
-      />
       {Object.keys(slideFilter).map((filter: string) => (
         <Slider
           key={filter}

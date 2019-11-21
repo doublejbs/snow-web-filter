@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 
 import CustomFilter from "./CustomFilter";
 import Button from "./atoms/Button";
+import { makeFilter } from "../utils/makeFilter";
 
 interface IProps {
   setFilter: React.Dispatch<React.SetStateAction<string>>;
@@ -37,11 +38,13 @@ const FilterSection: React.FC<IProps> = ({ setFilter }): JSX.Element => {
     opacity: 100
   });
 
-  const sliderChangeHandler = (event: any) => {
-    if (event.target.name === "slider") {
-      const { id, value } = event.target;
-      setSlideFilter({ ...slideFilter, [id]: value });
-    }
+  const sliderChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    const newFilter = { ...slideFilter, [id]: value };
+    const newFilterString = makeFilter(newFilter);
+
+    setSlideFilter(newFilter);
+    setFilter(newFilterString);
   };
 
   const onClickFilterButton = () => {

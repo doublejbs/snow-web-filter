@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 
 interface IProps {
   id: string;
   value: number;
-  sliderChangeHandler: (event: any) => void;
+  sliderChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Container = styled.div`
