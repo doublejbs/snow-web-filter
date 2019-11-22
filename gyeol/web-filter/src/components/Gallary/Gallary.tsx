@@ -1,52 +1,37 @@
 import React, { useState, useCallback, useEffect, MouseEvent } from "react";
 import styled from "styled-components";
 import Button from "../../common/Button";
+import { IImage } from "../../hooks/imageReducer";
 
 interface IProps {
-  images: string[];
-  deleteImage: (e: MouseEvent, seletedImageIndex: boolean[]) => void;
+  images: IImage[];
+  deleteImage: () => void;
+  toggleImage: (id: string) => void;
 }
 
-const Gallary: React.FC<IProps> = ({ images, deleteImage }): JSX.Element => {
-  const [selectedImgIndex, setSelectedImgIndex] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    const len = images.length;
-    const temp = Array(len).fill(false);
-    setSelectedImgIndex(temp);
-  }, [images]);
-
-  const handleClickImg = useCallback(
-    e => {
-      const { index } = e.target.dataset;
-      console.log(e.target);
-      const newIndexArray = [...selectedImgIndex];
-      newIndexArray[index] = !newIndexArray[index];
-      setSelectedImgIndex(newIndexArray);
-    },
-    [images, selectedImgIndex]
-  );
-
-  const handleDelete = useCallback(
-    (e: MouseEvent) => {
-      deleteImage(e, selectedImgIndex);
-    },
-    [images, selectedImgIndex]
-  );
+const Gallary: React.FC<IProps> = ({
+  images,
+  deleteImage,
+  toggleImage
+}): JSX.Element => {
+  const handleClickImg = useCallback(e => {
+    const { id } = e.target.dataset;
+    toggleImage(id);
+  }, []);
 
   return (
     <>
       <Buttons>
-        <Button onClick={handleDelete}>삭제</Button>
+        <Button onClick={deleteImage}>삭제</Button>
         <Button>저장</Button>
       </Buttons>
       <Container>
-        {images.map((image: string, index: number) => (
-          <ImageBox key={image} selected={selectedImgIndex[index]}>
+        {images.map((image: IImage) => (
+          <ImageBox key={image.id} selected={image.selected}>
             <img
               alt="capture"
-              data-index={index}
-              src={image}
+              data-id={image.id}
+              src={image.url}
               onClick={handleClickImg}
             />
           </ImageBox>
