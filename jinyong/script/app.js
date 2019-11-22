@@ -6,6 +6,8 @@ let heart;
 let fox;
 let itemName = '';
 let isPlaying = true;
+let cnv;
+let downloadName = 0;
 
 const detectionOptions = {
     withLandmarks: true,
@@ -28,7 +30,7 @@ function setup() {
 }
 
 function initCanvas(x, y) {
-    const cnv = createCanvas(360, 270);
+    cnv = createCanvas(360, 270);
 
     cnv.position(x, y);
 }
@@ -59,15 +61,14 @@ function createButtons(x, y){
 
     button4.position(x + width * 3 / 4, y + height);
     button4.mousePressed(function(){
-        if (isPlaying) {
-            isPlaying = false;
-            video.stop();
-            saveCanvas('picture', 'jpg');
-        }
-        else {
-            isPlaying = true;
-            video.loop();
-        }
+        const data = cnv.canvas.toDataURL();
+        const a = createElement('a');
+        const img = createElement('img');
+
+        img.elt.src = data;
+        a.elt.href = data;
+        a.elt.download = 'image' + str(downloadName++) + '.jpg';
+        a.child(img);
     });
 }
 
