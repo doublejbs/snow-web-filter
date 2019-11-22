@@ -16,6 +16,8 @@ let firstButton;
 let secondButton;
 let thirdButton;
 
+
+
 const configuration = {
 	iceServers: [{
 		urls: 'stun:stun.l.google.com:19302'
@@ -187,6 +189,7 @@ function startWebRTC(isOfferer) {
 function takePicture(){
 	const context = canvas.getContext('2d');
 	if(width && height){
+	
 		canvas.width = width;
 		canvas.height = height;  
 		//캔버스에 그리기
@@ -194,11 +197,12 @@ function takePicture(){
 		//캔버스로붙 실제 이미지를 가져오기
 		const imgUrl = canvas.toDataURL('test.png');
 		//엘리먼트를 만들고 가져온 이미지를 출력하기
-		const img = document.createElement('img');
-		img.setAttribute('src', imgUrl);
-		img.style.filter = filter;
+		const eimg = document.createElement('img');
+		eimg.setAttribute('src', imgUrl);
+		eimg.style.filter = filter;
+
 		//photos Div 안에 추가하기
-		photos.appendChild(img);
+		photos.appendChild(eimg);
 	}
 }
 
