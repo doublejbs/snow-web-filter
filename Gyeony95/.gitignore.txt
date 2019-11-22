@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-debug.log/
-=======
 *.log
->>>>>>> make_ui_gihyeon
