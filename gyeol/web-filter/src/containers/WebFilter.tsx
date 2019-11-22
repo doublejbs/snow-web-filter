@@ -1,9 +1,9 @@
 import React, { useState, MouseEvent } from "react";
 import styled from "styled-components";
 
-import VideoSection from "../components/VideoSection/VideoSection";
-import FilterSection from "../components/FilterSection/FilterSection";
-import Gallary from "../components/Gallary/Gallary";
+import VideoSection from "../components/VideoSection";
+import FilterSection from "../components/FilterSection";
+import Gallary from "../components/Gallary";
 import { Sticker } from "../utils/getStickerPosition";
 import { useImageReducer, IImage } from "../hooks/imageReducer";
 
