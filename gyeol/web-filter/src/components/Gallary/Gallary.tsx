@@ -1,40 +1,42 @@
-import React, { useState, useCallback, useEffect, MouseEvent } from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import Button from "../../common/Button";
-import { IImage } from "../../hooks/imageReducer";
+import ImageBox from "./ImageBox";
+import { IImage, Action } from "../../hooks/imageReducer";
+import actionTypes from "../../consts/actionTypes";
 
 interface IProps {
   images: IImage[];
-  deleteImage: () => void;
-  toggleImage: (id: string) => void;
+  imageDispatch: React.Dispatch<Action>;
 }
 
-const Gallary: React.FC<IProps> = ({
-  images,
-  deleteImage,
-  toggleImage
-}): JSX.Element => {
+const Gallary: React.FC<IProps> = ({ images, imageDispatch }): JSX.Element => {
   const handleClickImg = useCallback(e => {
     const { id } = e.target.dataset;
-    toggleImage(id);
+    imageDispatch({ type: actionTypes.TOGGLE_IMAGE, id });
   }, []);
+
+  const deleteImage = (): void => {
+    imageDispatch({ type: actionTypes.DELETE_IMAGE });
+  };
+
+  const downloadImage = (): void => {
+    imageDispatch({ type: actionTypes.DOWNLOAD_IMAGE });
+  };
 
   return (
     <>
       <Buttons>
         <Button onClick={deleteImage}>삭제</Button>
-        <Button>저장</Button>
+        <Button onClick={downloadImage}>저장</Button>
       </Buttons>
       <Container>
         {images.map((image: IImage) => (
-          <ImageBox key={image.id} selected={image.selected}>
-            <img
-              alt="capture"
-              data-id={image.id}
-              src={image.url}
-              onClick={handleClickImg}
-            />
-          </ImageBox>
+          <ImageBox
+            key={image.id}
+            image={image}
+            handleClickImg={handleClickImg}
+          ></ImageBox>
         ))}
       </Container>
     </>
@@ -56,18 +58,4 @@ const Buttons = styled.div`
   display: flex;
   margin-left: auto;
   margin-right: 2rem;
-`;
-
-interface IBox {
-  selected: boolean;
-}
-
-const ImageBox = styled.div`
-  background-color: ${(props: IBox) => props.selected && "lightgray"};
-  opacity: ${(props: IBox) => props.selected && "0.5"};
-  padding: 1rem;
-  width: fit-content;
-  > img {
-    height: 100%;
-  }
 `;

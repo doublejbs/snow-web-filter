@@ -1,4 +1,5 @@
 import { useReducer } from "react";
+import actionTypes from "../consts/actionTypes";
 
 export interface IImage {
   id: string;
@@ -6,28 +7,42 @@ export interface IImage {
   selected: boolean;
 }
 
-type Action =
-  | { type: "ADD_IMAGE"; img: IImage }
-  | { type: "DELETE_IMAGE" }
-  | { type: "TOGGLE_IMAGE"; id: string };
+export type Action = { type: Symbol; img?: IImage; id?: string };
 
 const reducer = (state: IImage[], action: Action): IImage[] => {
   switch (action.type) {
-    case "ADD_IMAGE":
-      console.log(action.img);
-      return [...state, action.img];
-    case "DELETE_IMAGE":
+    case actionTypes.ADD_IMAGE:
+      if (action.img) {
+        return [...state, action.img];
+      }
+      return state;
+    case actionTypes.DELETE_IMAGE:
       const filteredImage = state.filter(img => !img.selected);
       return filteredImage;
-    case "TOGGLE_IMAGE":
-      const changedState = state.map(img => {
-        if (img.id === action.id) {
-          img.selected = !img.selected;
-        }
-        return img;
-      });
+    case actionTypes.TOGGLE_IMAGE:
+      const copyState = [...state];
+      const target = copyState.find(img => img.id === action.id);
+      if (target) {
+        target.selected = !target.selected;
+      }
+      return copyState;
+    case actionTypes.DOWNLOAD_IMAGE:
+      const images = [...state];
+      const link = document.createElement("a");
+      const download = (image: IImage, index: number) => {
+        link.href = image.url;
+        link.download = `web-filter[${index}]`;
+        link.click();
+      };
 
-      return changedState;
+      images.forEach((image: IImage, index: number) => {
+        if (image.selected) {
+          download(image, index);
+        }
+      });
+      return state;
+    default:
+      return state;
   }
 };
 
