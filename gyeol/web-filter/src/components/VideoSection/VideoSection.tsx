@@ -4,11 +4,13 @@ import clmtrackr from "clmtrackr";
 
 import Button from "../../common/Button";
 import getStickerPosition, { Sticker } from "../../utils/getStickerPosition";
+import { IImage } from "../../hooks/imageReducer";
+import getUUID from "../../utils/getUUID";
 
 interface IProps {
   filter: string;
   sticker: Sticker | null;
-  addImages: (img: string) => void;
+  addImages: (img: IImage) => void;
 }
 
 const VideoSection: React.FC<IProps> = ({
@@ -117,7 +119,11 @@ const VideoSection: React.FC<IProps> = ({
 
     const imgUrl = canvas.toDataURL("image/png");
 
-    addImages(imgUrl);
+    addImages({
+      id: getUUID(),
+      url: imgUrl,
+      selected: false
+    });
   };
 
   const startFaceTracker = (sticker: Sticker) => {
