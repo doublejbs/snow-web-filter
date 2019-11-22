@@ -29,19 +29,17 @@ const reducer = (state: IImage[], action: Action): IImage[] => {
     case actionTypes.DOWNLOAD_IMAGE:
       const images = [...state];
       const link = document.createElement("a");
-      const download = () => {
-        const image = images.pop();
-
-        if (image && image.selected) {
-          link.href = image.url;
-          link.download = image.url;
-          link.click();
-        }
+      const download = (image: IImage, index: number) => {
+        link.href = image.url;
+        link.download = `web-filter[${index}]`;
+        link.click();
       };
 
-      while (images.length) {
-        download();
-      }
+      images.forEach((image: IImage, index: number) => {
+        if (image.selected) {
+          download(image, index);
+        }
+      });
       return state;
     default:
       return state;
