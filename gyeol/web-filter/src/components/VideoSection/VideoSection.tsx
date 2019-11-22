@@ -6,6 +6,7 @@ import Button from "../../common/Button";
 import getStickerPosition, { Sticker } from "../../utils/getStickerPosition";
 import { IImage, Action } from "../../hooks/imageReducer";
 import getUUID from "../../utils/getUUID";
+import actionTypes from "../../consts/actionTypes";
 
 interface IProps {
   filter: string;
@@ -125,7 +126,7 @@ const VideoSection: React.FC<IProps> = ({
       selected: false
     };
 
-    imageDispatch({ type: "ADD_IMAGE", img });
+    imageDispatch({ type: actionTypes.ADD_IMAGE, img });
   };
 
   const startFaceTracker = (sticker: Sticker) => {

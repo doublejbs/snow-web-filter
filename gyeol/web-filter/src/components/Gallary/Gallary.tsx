@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Button from "../../common/Button";
 import ImageBox from "./ImageBox";
 import { IImage, Action } from "../../hooks/imageReducer";
+import actionTypes from "../../consts/actionTypes";
 
 interface IProps {
   images: IImage[];
@@ -12,15 +13,15 @@ interface IProps {
 const Gallary: React.FC<IProps> = ({ images, imageDispatch }): JSX.Element => {
   const handleClickImg = useCallback(e => {
     const { id } = e.target.dataset;
-    imageDispatch({ type: "TOGGLE_IMAGE", id });
+    imageDispatch({ type: actionTypes.TOGGLE_IMAGE, id });
   }, []);
 
   const deleteImage = (): void => {
-    imageDispatch({ type: "DELETE_IMAGE" });
+    imageDispatch({ type: actionTypes.DELETE_IMAGE });
   };
 
   const downloadImage = (): void => {
-    imageDispatch({ type: "DOWNLOAD_IMAGE" });
+    imageDispatch({ type: actionTypes.DOWNLOAD_IMAGE });
   };
 
   return (
