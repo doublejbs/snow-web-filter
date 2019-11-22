@@ -31,7 +31,7 @@ function drawLandmarks(detections) {
             drawPart(leftEye, true);
             drawPart(rightEye, true);
         }
-        else if (itemName === 'fox') {
+        else if (itemName === 'glasses') {
             drawPart(nose, true);
         }
     }
@@ -57,8 +57,8 @@ function drawPart(features, closed) {
     else if (itemName === 'heart') {
         image(heart, totalX - 15, totalY - 15 + 30, 30, 30);
     }
-    else if (itemName === 'fox') {
-        image(fox, totalX - 100 / 2, totalY - 100 / 2, 100, 100);
+    else if (itemName === 'glasses') {
+        image(glasses, totalX - 100 / 2, totalY - 100 * 3 / 5, 100, 100);
     }
 
     endShape(closed ? CLOSE : undefined);

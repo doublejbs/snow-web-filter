@@ -3,12 +3,14 @@ let video;
 let detections;
 let star;
 let heart; 
-let fox;
+let glasses;
 let itemName = '';
 let isPlaying = true;
 let cnv;
 let downloadName = 0;
 let cameraDiv;
+const btns = [{ name: '별', itemName: 'star' }, { name: '하트', itemName: 'heart' }, { name: '코주부', itemName: 'glasses' }];
+
 
 const detectionOptions = {
     withLandmarks: true,
@@ -18,6 +20,7 @@ const detectionOptions = {
 function preload() {
     star = loadImage('assets/star.png');
     heart = loadImage('assets/heart.png');
+    glasses = loadImage('assets/glasses.png');
 }
 
 function setup() {
@@ -40,28 +43,15 @@ function initCanvas(x, y) {
 }
 
 function createButtons(x, y){
-    button1 = createButton('별');
+    btns.forEach((btn, idx) => {
+        const { name, itemName: iName } = btn;
+        const element = createButton(name);
 
-    button1.position(x, y + height);
-    cameraDiv.child(button1);
-    button1.mousePressed(function(){
-        itemName = 'star';
-    });
-    
-    button2 = createButton('하트');
-
-    cameraDiv.child(button2);
-    button2.position(x + width / 4, y + height);
-    button2.mousePressed(function(){
-        itemName = 'heart';
-    });
-
-    button3 = createButton('item3');
-
-    cameraDiv.child(button3);
-    button3.position(x + width * 2 / 4, y + height);
-    button3.mousePressed(function(){
-        itemName = 'fox';
+        element.position(x + width * idx / 4, y + height);
+        cameraDiv.child(element);
+        element.mousePressed(function () {
+            itemName = iName;
+        });
     });
 
     button4 = createButton('촬영');
