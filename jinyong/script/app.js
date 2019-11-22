@@ -8,6 +8,7 @@ let itemName = '';
 let isPlaying = true;
 let cnv;
 let downloadName = 0;
+let cameraDiv;
 
 const detectionOptions = {
     withLandmarks: true,
@@ -22,6 +23,8 @@ function preload() {
 function setup() {
     const x = (windowWidth) / 5;
     const y = (windowHeight) / 4;
+    cameraDiv = createElement('div');
+    cameraDiv.elt.style.position = 'fixed';
 
     frameRate(120);
     initCanvas(x, y);
@@ -33,18 +36,21 @@ function initCanvas(x, y) {
     cnv = createCanvas(360, 270);
 
     cnv.position(x, y);
+    cameraDiv.child(cnv);
 }
 
 function createButtons(x, y){
     button1 = createButton('별');
 
     button1.position(x, y + height);
+    cameraDiv.child(button1);
     button1.mousePressed(function(){
         itemName = 'star';
     });
     
     button2 = createButton('하트');
 
+    cameraDiv.child(button2);
     button2.position(x + width / 4, y + height);
     button2.mousePressed(function(){
         itemName = 'heart';
@@ -52,6 +58,7 @@ function createButtons(x, y){
 
     button3 = createButton('item3');
 
+    cameraDiv.child(button3);
     button3.position(x + width * 2 / 4, y + height);
     button3.mousePressed(function(){
         itemName = 'fox';
@@ -60,6 +67,7 @@ function createButtons(x, y){
     button4 = createButton('촬영');
     const listDiv = createElement('div');
 
+    cameraDiv.child(button4);
     listDiv.size(width, height);
     listDiv.position(x + width + 10, 10);
     button4.position(x + width * 3 / 4, y + height);
@@ -83,75 +91,4 @@ function initVideo(){
     video.size(width, height);
     video.hide();
     faceapi = ml5.faceApi(video, detectionOptions, modelReady);
-}
-
-function modelReady() {
-    console.log('ready!');
-    console.log(faceapi);
-    faceapi.detect(gotResults);
-}
-
-function gotResults(err, result) {
-    if (err) {
-        console.log(err);
-        return;
-    }
-
-    detections = result;
-
-    background(255);
-    image(video, 0, 0, width, height);
-
-    if (detections && detections.length > 0) {
-        drawLandmarks(detections);
-    }
-    requestAnimationFrame(function () {
-        faceapi.detect(gotResults)
-    });
-}
-
-function drawLandmarks(detections) {
-    for (let i = 0; i < detections.length; i++) {
-        const { mouth, nose, leftEye, rightEye, rightEyeBrow, leftEyeBrow } = detections[i].parts;
-        
-        if (itemName === 'star' || itemName === 'heart'){
-            drawPart(leftEye, true);
-            drawPart(rightEye, true);
-        }
-        else if (itemName === 'fox'){
-            drawPart(nose, true);
-        }
-        else if (itemName === ''){
-            continue;
-        }
-    }
-}
-
-function drawPart(features, closed) {
-    beginShape();
-
-    let totalX = 0;
-    let totalY = 0;
-
-    for (const feature of features) {
-        totalX += feature._x;
-        totalY += feature._y;
-    }
-    
-    totalX /= features.length;
-    totalY /= features.length;
-
-    if (itemName == 'star'){
-        image(star, totalX - 15, totalY - 15, 30, 30);
-        //console.log(features.length);
-        //image(star, features[41].x, features[41].y, 30, 30);
-    }
-    else if (itemName == 'heart'){
-        image(heart, totalX - 15, totalY - 15 + 30, 30, 30);
-    }
-    else if (itemName == 'fox'){
-        image(fox, totalX - 100 / 2, totalY - 100 / 2, 100, 100);
-    }
-
-    endShape(closed ? CLOSE : undefined);
 }
