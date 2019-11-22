@@ -56,7 +56,7 @@ function createButtons(x, y){
 
     button4 = createButton('촬영');
     const listDiv = createElement('div');
-
+  
     cameraDiv.child(button4);
     listDiv.size(width, height);
     listDiv.position(x + width + 10, 10);

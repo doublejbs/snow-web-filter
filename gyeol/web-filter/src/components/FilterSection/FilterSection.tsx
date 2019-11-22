@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 
+import { ReactComponent as FilterSVG } from "../../assets/filter.svg";
+
 import CustomFilter from "./CustomFilter";
 import Button from "../../common/Button";
 import filterToString from "../../utils/filterToString";
@@ -9,7 +11,6 @@ import { Sticker } from "../../utils/getStickerPosition";
 interface IProps {
   setSticker: React.Dispatch<React.SetStateAction<Sticker | null>>;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  // startFaceTracker: (sticker: Sticker) => void;
 }
 
 export interface IFilter {
@@ -27,10 +28,8 @@ export interface IFilter {
 const FilterSection: React.FC<IProps> = ({
   setFilter,
   setSticker
-  // startFaceTracker
 }): JSX.Element => {
   const [showCustom, setShowCustom] = useState<boolean>(false);
-
   const [slideFilter, setSlideFilter] = useState<IFilter>({
     // 이하 0 ~ 100
     grayscale: 0,
@@ -66,8 +65,9 @@ const FilterSection: React.FC<IProps> = ({
     [flag, filterToString, setSlideFilter, setFilter]
   );
 
-  const onClickFilterButton = useCallback(() => {
-    setFilter("blur(2px)");
+  const onClickFilterButton = useCallback(e => {
+    const { svgfilter } = e.target.dataset;
+    setFilter(`url(#${svgfilter})`);
   }, []);
 
   const toggleCustomFilter = useCallback(() => {
@@ -81,7 +81,12 @@ const FilterSection: React.FC<IProps> = ({
 
   return (
     <Container>
-      <Button onClick={onClickFilterButton}>blur</Button>
+      <Button data-svgfilter="feMorphology" onClick={onClickFilterButton}>
+        feMorphology
+      </Button>
+      <Button data-svgfilter="feColorMatrix" onClick={onClickFilterButton}>
+        feColorMatrix
+      </Button>
       <Button data-sticker={Sticker.RABBIT} onClick={onClickSticker}>
         토끼귀
       </Button>
@@ -89,13 +94,13 @@ const FilterSection: React.FC<IProps> = ({
         메롱
       </Button>
       <Button onClick={toggleCustomFilter}>Custom</Button>
-      <CaptureButton>캡쳐</CaptureButton>
       {showCustom ? (
         <CustomFilter
           slideFilter={slideFilter}
           sliderChangeHandler={sliderChangeHandler}
         />
       ) : null}
+      <SVG />
     </Container>
   );
 };
@@ -110,6 +115,6 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const CaptureButton = styled(Button)`
-  border-radius: 0;
+const SVG = styled(FilterSVG)`
+  display: none;
 `;
