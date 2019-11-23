@@ -6,6 +6,11 @@ rabbit.src = rabbitPng;
 const tongue = new Image();
 tongue.src = tonguePng;
 
+export enum Sticker {
+  RABBIT = "rabbit",
+  TONGUE = "tongue"
+}
+
 const getStickerPosition = (
   positions: [number, number][],
   sticker: Sticker
@@ -46,8 +51,3 @@ const getStickerPosition = (
 };
 
 export default getStickerPosition;
-
-export enum Sticker {
-  RABBIT = "rabbit",
-  TONGUE = "tongue"
-}
